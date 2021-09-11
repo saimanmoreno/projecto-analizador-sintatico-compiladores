@@ -1,0 +1,67 @@
+package sintatico;
+
+import java.io.*;
+import java_cup.runtime.*;
+import sintatico.Yylex;
+
+parser code
+{:
+    /*public static void main(String args[]) throws Exception{
+        new parser(new Yylex(System.in)).parse();
+    }
+
+    public void syntax_error(Symbol s){
+        report_error("Erro de sintaxe. Linha: " + (s.right + 1)) +
+        "Coluna: "+ s.left + ".Texto: \"" + s.value + "\"", null);
+    }*/
+:};
+
+terminal String SELECT, FROM, WHERE, ORDER, BY, PONTO_E_VIRGULA, VIRGULA, IGUAL, TODOS, TABELA, ATRIBUTO, ERRO;
+terminal integer VALOR_NUMERICO;
+non terminal START, SEL, EXPR, SIMB, FR, TAB, CONDICAO, EXPRESSAO, IG, NUMERO, ATRIB, ORDENACAO, PONTUACAO;
+
+START ::= START EXPR
+        |EXPR
+;
+EXPR ::= SEL SIMB FR TAB CONDICAO EXPRESSAO ORDENACAO ATRIB PONTUACAO {: System.out.println("Sentenças analizadas coretamente. Sem erros"); :}
+                | error {: System.out.println("Erro sintatico na sentenca"); :};
+
+SEL ::= SELECT
+;
+
+SIMB ::= TODOS
+        |ATRIB
+        |ATRIB VIRGULA ATRIB
+;
+
+FR ::= FROM
+;
+
+TAB ::= TABELA
+;
+
+CONDICAO ::= WHERE
+;
+
+EXPRESSAO ::= EXPRESSAO ATRIBUTO IG ATRIBUTO
+                        |ATRIBUTO IG ATRIBUTO
+                        |ATRIBUTO IG NUMERO
+;
+
+ATRIB ::= ATRIBUTO
+;
+
+IG ::= IGUAL
+;
+
+NUMERO ::= VALOR_NUMERICO
+;
+
+ORDENACAO ::= ORDER BY
+;
+
+PONTUACAO ::= PONTO_E_VIRGULA
+;
+
+
+
